@@ -6,16 +6,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class Product {
 	
 	@Id
-	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	Integer id;
 	
-	@Column String name;
-	@Column String type;
+	@Column
+	@JsonProperty("name")
+	String name;
+	
+	@Column
+	@JsonProperty("type")
+	String type;
 	
 	
 	@Override
@@ -24,8 +30,8 @@ public class Product {
 	}
 	
 	public Product() {}
-	public Product(String name, String type) {
-		this.name = name; this.type = type;
+	public Product(Integer id, String name, String type) {
+		this.id = id; this.name = name; this.type = type;
 	}
 
 }

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class ProductService {
 	
 	@Autowired
@@ -25,6 +27,14 @@ public class ProductService {
 					return product.type.equals(type);
 				})
 				.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public Product deleteById(Integer id) {
+		
+		Product prod = productRepository.findOne(id);
+		if (prod != null) productRepository.delete(id);
+		return prod;
 	}
 
 }
