@@ -14,6 +14,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestControllerAdvice
 public class ProductException extends ResponseEntityExceptionHandler {
 	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+		String bodyOfResponse = "{\"message\":\"Please provide valid input\"}";
+		return handleExceptionInternal(ex, bodyOfResponse, 
+				headers, HttpStatus.BAD_REQUEST, request);
+	}
+	
 	/*@ExceptionHandler(value = {JsonMappingException.class})
 	private ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
 		System.out.println("exception handler reached");
@@ -21,22 +28,4 @@ public class ProductException extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, new ResponseErrorJson(bodyOfResponse), 
 		          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}*/
-	@Override
-	protected
-	ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
-		System.out.println("exception handler reached");
-		String bodyOfResponse = "{\"message\":\"Please provide valid input\"}";
-		return handleExceptionInternal(ex, bodyOfResponse, 
-		          headers, HttpStatus.BAD_REQUEST, request);
-	}
-	
-	class ResponseErrorJson {
-		String status;
-		String message;
-		ResponseErrorJson(){}
-		ResponseErrorJson(String message){
-			this.message = message;
-		}
-	}
-	
 }
