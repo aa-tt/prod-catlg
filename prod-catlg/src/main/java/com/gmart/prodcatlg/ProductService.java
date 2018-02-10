@@ -33,7 +33,8 @@ public class ProductService {
 	public Product deleteById(Integer id) {
 		
 		Product prod = productRepository.findOne(id);
-		if (prod != null) productRepository.delete(id);
+		/*if (prod != null) */
+			productRepository.delete(id);
 		return prod;
 	}
 

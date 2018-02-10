@@ -1,15 +1,14 @@
 package com.gmart.prodcatlg;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestControllerAdvice
 public class ProductException extends ResponseEntityExceptionHandler {
@@ -21,11 +20,10 @@ public class ProductException extends ResponseEntityExceptionHandler {
 				headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
-	/*@ExceptionHandler(value = {JsonMappingException.class})
-	private ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
-		System.out.println("exception handler reached");
-		String bodyOfResponse = "Please provide valid input";
-		return handleExceptionInternal(ex, new ResponseErrorJson(bodyOfResponse), 
-		          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}*/
+	@ExceptionHandler(value = {EmptyResultDataAccessException.class})
+	private ResponseEntity<Object> handleDataError(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = "{\"message\":\"Product does not exist\"}";
+		return handleExceptionInternal(ex, bodyOfResponse, 
+		          new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
 }
